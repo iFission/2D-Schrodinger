@@ -1,15 +1,6 @@
 #%% [markdown]
 # # Schrödinger Assignment
-# Solving the Schrödinger equation for hydrogen atom requires to code for the various mathematical components that constitute the wavefunction. Transfer the codes for required functions you submitted to vocareum corresponding to the weeks in this jupyter notebook.
-#%% [markdown]
-# ## Week 3:
-#%% [markdown]
-# Q1: Create two functions to convert degrees to radian and radian to degrees respectively. These functions should take 1 float argument and return the respective conversions each. Round to 5 decimal places.
-#
-# Hint: you can use Numpy trigonometric function by doing import numpy as np.
-
 #%%
-# Code:
 import numpy as np
 import scipy.constants as c
 
@@ -22,27 +13,7 @@ def rad_to_deg(rad):
     return round(rad / np.pi * 180, 5)
 
 
-# Test:
-# assert statement will throw error if the result is wrong
-# no output will be produced for correct results
-
-eps = 1e-3
-assert abs(deg_to_rad(90) - 1.5708) < eps
-assert abs(deg_to_rad(180) - 3.14159) < eps
-assert abs(deg_to_rad(270) - 4.71239) < eps
-assert abs(rad_to_deg(3.14) - 179.90875) < eps
-assert abs(rad_to_deg(3.14 / 2.0) - 89.95437) < eps
-assert abs(rad_to_deg(3.14 * 3 / 4) - 134.93156) < eps
-
-#%% [markdown]
-# Q2: Create two functions to convert spherical to cartesian coordinates and cartesian to spherical coordinates. These functions should take 3 float arguments and return the 3 respective conversions. Round to 5 decimal places. (Pre-requisite: Part 2b) The convention is shown below.
-# Hint: You can use Numpy trigonometric function by doing ```import numpy as np```.
-#
-# ![spherical.png](attachment:spherical.png)
-
-
 #%%
-###Code:
 def spherical_to_cartesian(r, theta, phi):
     x = r * np.sin(theta) * np.cos(phi)
     y = r * np.sin(theta) * np.sin(phi)
@@ -59,28 +30,7 @@ def cartesian_to_spherical(x, y, z):
     return r, theta, phi
 
 
-# Test:
-# assert statement will throw error if the result is wrong
-# no output will be produced for correct results
-
-assert spherical_to_cartesian(3, 0, np.pi) == (-0.0, 0.0, 3.0)
-assert spherical_to_cartesian(3, np.pi / 2.0, np.pi / 2.0) == (0.0, 3.0, 0.0)
-assert spherical_to_cartesian(3, np.pi, 0) == (0.0, 0.0, -3.0)
-assert cartesian_to_spherical(3, 0, 0) == (3.0, 1.5708, 0.0)
-assert cartesian_to_spherical(0, 3, 0) == (3.0, 1.5708, 1.5708)
-assert cartesian_to_spherical(0, 0, 3) == (3.0, 0.0, 0.0)
-assert cartesian_to_spherical(0, -3, 0) == (3.0, 1.5708, -1.5708)
-assert cartesian_to_spherical(0, 0, 3) == (3.0, 0.0, 0.0)
-
-#%% [markdown]
-# ## Week4:
-#%% [markdown]
-# Q1: Create a function that calculates the normalized angular solution. This function should take 4 float arguments and return the value of the normalized angular solution for the specific m, l, θ and Φ. The return value is a complex number rounded to 5 decimal places for both the real and the imaginary parts.
-#
-# Hint: You may want to use ```np.round()``` function to round the return value to 5 decimal places. You can also use ```np.complex()``` to ensure the output is a complex number.
-
 #%%
-### Code for angular wavefunction:
 import numpy as np
 from scipy.constants import pi
 import scipy.constants as c
@@ -112,22 +62,7 @@ def angular_wave_func(m, l, theta, phi):
     return np.round(Y, 5)
 
 
-# Test for angular wavefunction:
-# assert statement will throw error if the result is wrong
-# no output will be produced for correct results
-
-assert angular_wave_func(0, 0, 0, 0) == (0.28209 + 0j)
-assert angular_wave_func(0, 1, c.pi, 0) == (-0.4886 + 0j)
-assert angular_wave_func(1, 1, c.pi / 2, c.pi) == (0.34549 - 0j)
-assert angular_wave_func(0, 2, c.pi, 0) == (0.63078 + 0j)
-
-#%% [markdown]
-# Q2: Create a function that calculates the normalized radial solution. This function should take 3 float arguments and return the value of the normalized radial solution for the specific n, l, and r.  The return value should be normalized to a^(-3/2), where a is the Bohr's radius, and np.rounded to 5 decimal places.
-#
-# Hint: You may want to use ```np.np.round()``` function to np.round the return value to 5 decimal places.
-
 #%%
-# Code for radial wavefunction:
 import numpy as np
 import scipy.constants as c
 a = c.physical_constants['Bohr radius'][0]
@@ -159,22 +94,6 @@ def radial_wave_func(n, l, r):
     return np.round(R, 5)
 
 
-# Test for radial wavefunction:
-# assert statement will throw error if the result is wrong
-# no output will be produced for correct results
-
-assert radial_wave_func(1, 0, a) == 0.73576
-assert radial_wave_func(1, 0, a) == 0.73576
-assert radial_wave_func(2, 1, a) == 0.12381
-assert radial_wave_func(2, 1, 2 * a) == 0.15019
-assert radial_wave_func(3, 1, 2 * a) == 0.08281
-
-#%% [markdown]
-# ## Week 5:
-#%% [markdown]
-# Q1: Create a function called mgrid that takes in six arguments xstart, xend, xpoints, ystart, yend, ypoints. The first three arguments specifies the starting, ending and the number of points in the x axis. The last three arguments does the same for the y axis. The function should return a list of lists as described in numpy.mgrid when the step length is a complex number. You are not allowed to use numpy.mgrid or any other built-in function in your code, but you are strongly suggested to use numpy.mgrid to test your version of mgrid.
-
-
 #%%
 def frange(start, end, points):
     ls = []
@@ -190,27 +109,6 @@ def frange(start, end, points):
 def mgrid2d(xstart, xend, xpoints, ystart, yend, ypoints):
     return [[[x] * ypoints for x in frange(xstart, xend, xpoints)],
             [frange(ystart, yend, ypoints)] * xpoints]
-
-
-mgrid2d(0, 4, 5, 0, 4, 3)
-#%%
-# Test:
-# assert statement will throw error if the result is wrong
-# no output will be produced for correct results
-import numpy as np
-
-assert np.shape(mgrid2d(0, 4, 5, 0, 4,
-                        5)) == np.shape(np.mgrid[0:4:5j, 0:4:5j])
-assert np.allclose(mgrid2d(0, 4, 5, 0, 4, 5), np.mgrid[0:4:5j, 0:4:5j])
-
-assert np.shape(mgrid2d(0, 5, 15, 0, 4,
-                        10)) == np.shape(np.mgrid[0:5:15j, 0:4:10j])
-assert np.allclose(mgrid2d(0, 5, 15, 0, 4, 10), np.mgrid[0:5:15j, 0:4:10j])
-
-#%% [markdown]
-# Q2. Create a function called mgrid that takes in nine arguments, three to specify each x, y, and z axis. The first three input arguments specifies the start (xstart), end (xend), and the number of points (xpoints) in the x axis. Similarly for the y and z axis. The function should return a list of lists as described in numpy.mgrid. You are not allowed to use numpy.mgrid or any other built-in function.
-#
-# However, you can use numpy.mgrid to test your own function and compare the result.
 
 
 #%%
@@ -236,71 +134,36 @@ def mgrid3d(xstart, xend, xpoints, ystart, yend, ypoints, zstart, zend,
     return x, y, z
 
 
-mgrid3d(1, 2, 3, 3, 4, 3, 5, 6, 4)
-
-#%%
-np.mgrid[1:2:3j, 3:4:3j, 5:6:4j]
 #%%
 
-# Test:
-# assert statement will throw error if the result is wrong
-# no output will be produced for correct results
-
-assert np.shape(mgrid3d(0, 4, 5, 0, 4, 5, 0, 4,
-                        5)) == np.shape(np.mgrid[0:4:5j, 0:4:5j, 0:4:5j])
-assert np.allclose(
-    mgrid3d(0, 4, 5, 0, 4, 5, 0, 4, 5), np.mgrid[0:4:5j, 0:4:5j, 0:4:5j])
-
-assert np.shape(mgrid3d(0, 5, 15, 0, 4, 10, 1, 2,
-                        3)) == np.shape(np.mgrid[0:5:15j, 0:4:10j, 1:2:3j])
-assert np.allclose(
-    mgrid3d(0, 5, 15, 0, 4, 10, 1, 2, 3), np.mgrid[0:5:15j, 0:4:10j, 1:2:3j])
-
-#%% [markdown]
-# ## Week 6:
-#%% [markdown]
-# Q1. Create a function that calculates the square of the magnitude of the real wave function. The function takes in several arguments:
-# * ```n```: quantum number n
-# * ```l```: quantum number l
-# * ```m```: quantum number m
-# * ```roa```: maximum distance to plot from the centre, normalized to Bohr radius, i.e. r/a.
-# * ```Nx```: Number of points in the x axis.
-# * ```Ny```: Number of points in the y axis.
-# * ```Nz```: Number of points in the z axis.
-#
-# The function should return:
-# * ```xx```: x location of all the points in a 3D Numpy array.
-# * ```yy```: y location of all the points in a 3D Numpy array.
-# * ```zz```: z location of all the points in a 3D Numpy array.
-# * ```density```: The square of the magnitude of the real wave function, i.e. |Ψ|^2
-#
-# To obtain the real wave function from complex parts, i.e. m != 0:
-#
-# ![spherical_harmonics_real.jpg](attachment:spherical_harmonics_real.jpg)
-#
-# Hint: You may find the following functions to be useful:
-# * ```fvec=numpy.vectorize(f)```: This function takes in a function and return its vectorized version of the function.
-#
-# * ```m=mag(c)```: This function takes in a complex number and returns its absolute value or its magnitude. Use your own function rather than numpy's built-in function.
-#
-# * ```ar=numpy.array(x)```: This function takes in a list and returns a numpy array. Numpy array is faster to process than Python's list.
-#
-# Hint: You will need to use all the previous functions you have done. Note that some of those functions may round the output to 5 decimal places and the final magnitude output from this function should also be rounded to 5 decimal places.
-
-#%%
-###Code:
 import numpy as np
 
 
+def real_angular_wave_func(m, l, theta, phi):
+    if m < 0:
+        return np.real(
+            1j / np.sqrt(2) * (angular_wave_func(m, l, theta, phi) - (
+                (-1)**m) * angular_wave_func(-m, l, theta, phi)))
+    elif m == 0:
+        return np.real(angular_wave_func(m, l, theta, phi))
+    else:
+        return np.real(
+            1 / np.sqrt(2) * (angular_wave_func(-m, l, theta, phi) + (
+                (-1)**m) * angular_wave_func(m, l, theta, phi)))
+
+
 def hydrogen_wave_func(n, l, m, roa, Nx, Ny, Nz):
-    xx, yy, zz = np.array(mgrid3d(-roa, roa, Nx, -roa, roa, Ny, -roa, roa, Nz))
+    xx, yy, zz = tuple(
+        np.round(
+            np.array(mgrid3d(-roa, roa, Nx, -roa, roa, Ny, -roa, roa, Nz)), 5))
 
     # '''vectorize cartesian to spherical function'''
     # cartesian_to_spherical_vectorized = np.vectorize(cartesian_to_spherical)
     # r, theta, phi = cartesian_to_spherical_vectorized(xx, yy, zz)
     r, theta, phi = np.vectorize(cartesian_to_spherical)(xx, yy, zz)
 
-    ang = np.vectorize(angular_wave_func)(m, l, theta, phi)
+    # return r, theta, phi
+    ang = np.vectorize(real_angular_wave_func)(m, l, theta, phi)
     rad = np.vectorize(radial_wave_func)(
         n, l, r * a)  # radius multiply by a (Bohr radius)
     real_wave_func = np.absolute(ang * rad)**2
@@ -309,332 +172,6 @@ def hydrogen_wave_func(n, l, m, roa, Nx, Ny, Nz):
                  5))  # use np's round function, convert nparray to tuple
 
 
-print(hydrogen_wave_func(2, 1, 1, 5, 3, 4, 2))
-
-#%%
-###Test:
-print('Test 1')
-x, y, z, mag = hydrogen_wave_func(2, 1, 1, 8, 2, 2, 2)
-print('x, y, z:')
-print(x, y, z)
-print('mag:')
-print(mag)
-
-print('\n')
-print('Test 2')
-x, y, z, mag = hydrogen_wave_func(2, 1, 1, 5, 3, 4, 2)
-print('x, y, z:')
-print(x, y, z)
-print('mag:')
-print(mag)
-
-print('\n')
-print('Test 3')
-x, y, z, mag = hydrogen_wave_func(2, 0, 0, 3, 5, 4, 3)
-print('x, y, z:')
-print(x, y, z)
-print('mag:')
-print(mag)
-
-#%% [markdown]
-# Expected Output:
-#
-# Test 1
-#
-# x, y, z:
-#
-# [[[-8. -8.]
-#
-#   [-8. -8.]]
-#
-#  [[ 8.  8.]
-#
-#   [ 8.  8.]]] [[[-8. -8.]
-#
-#   [ 8.  8.]]
-#
-#  [[-8. -8.]
-#
-#   [ 8.  8.]]] [[[-8.  8.]
-#
-#   [-8.  8.]]
-#
-#  [[-8.  8.]
-#
-#   [-8.  8.]]]
-#
-# mag:
-#
-# [[[ 0.  0.]
-#
-#   [ 0.  0.]]
-#
-#  [[ 0.  0.]
-#
-#   [ 0.  0.]]]
-#
-#
-# Test 2
-#
-# x, y, z:
-#
-# [[[-5. -5.]
-#
-#   [-5. -5.]
-#
-#   [-5. -5.]
-#
-#   [-5. -5.]]
-#
-#  [[ 0.  0.]
-#
-#   [ 0.  0.]
-#
-#   [ 0.  0.]
-#
-#   [ 0.  0.]]
-#
-#  [[ 5.  5.]
-#
-#   [ 5.  5.]
-#
-#   [ 5.  5.]
-#
-#   [ 5.  5.]]] [[[-5.      -5.     ]
-#
-#   [-1.66667 -1.66667]
-#
-#   [ 1.66667  1.66667]
-#
-#   [ 5.       5.     ]]
-#
-#  [[-5.      -5.     ]
-#
-#   [-1.66667 -1.66667]
-#
-#   [ 1.66667  1.66667]
-#
-#   [ 5.       5.     ]]
-#
-#  [[-5.      -5.     ]
-#
-#   [-1.66667 -1.66667]
-#
-#   [ 1.66667  1.66667]
-#
-#   [ 5.       5.     ]]] [[[-5.  5.]
-#
-#   [-5.  5.]
-#
-#   [-5.  5.]
-#
-#   [-5.  5.]]
-#
-#  [[-5.  5.]
-#
-#   [-5.  5.]
-#
-#   [-5.  5.]
-#
-#   [-5.  5.]]
-#
-#  [[-5.  5.]
-#
-#   [-5.  5.]
-#
-#   [-5.  5.]
-#
-#   [-5.  5.]]]
-#
-# mag:
-#
-# [[[  4.00000000e-05   4.00000000e-05]
-#
-#   [  1.70000000e-04   1.70000000e-04]
-#
-#   [  1.70000000e-04   1.70000000e-04]
-#
-#   [  4.00000000e-05   4.00000000e-05]]
-#
-#  [[  0.00000000e+00   0.00000000e+00]
-#
-#   [  0.00000000e+00   0.00000000e+00]
-#
-#   [  0.00000000e+00   0.00000000e+00]
-#
-#   [  0.00000000e+00   0.00000000e+00]]
-#
-#  [[  4.00000000e-05   4.00000000e-05]
-#
-#   [  1.70000000e-04   1.70000000e-04]
-#
-#   [  1.70000000e-04   1.70000000e-04]
-#
-#   [  4.00000000e-05   4.00000000e-05]]]
-#
-#
-# Test 3
-#
-# x, y, z:
-#
-# [[[-3.  -3.  -3. ]
-#
-#   [-3.  -3.  -3. ]
-#
-#   [-3.  -3.  -3. ]
-#
-#   [-3.  -3.  -3. ]]
-#
-#  [[-1.5 -1.5 -1.5]
-#
-#   [-1.5 -1.5 -1.5]
-#
-#   [-1.5 -1.5 -1.5]
-#
-#   [-1.5 -1.5 -1.5]]
-#
-#  [[ 0.   0.   0. ]
-#
-#   [ 0.   0.   0. ]
-#
-#   [ 0.   0.   0. ]
-#
-#   [ 0.   0.   0. ]]
-#
-#  [[ 1.5  1.5  1.5]
-#
-#   [ 1.5  1.5  1.5]
-#
-#   [ 1.5  1.5  1.5]
-#
-#   [ 1.5  1.5  1.5]]
-#
-#  [[ 3.   3.   3. ]
-#
-#   [ 3.   3.   3. ]
-#
-#   [ 3.   3.   3. ]
-#
-#   [ 3.   3.   3. ]]] [[[-3. -3. -3.]
-#
-#   [-1. -1. -1.]
-#
-#   [ 1.  1.  1.]
-#
-#   [ 3.  3.  3.]]
-#
-#  [[-3. -3. -3.]
-#
-#   [-1. -1. -1.]
-#
-#   [ 1.  1.  1.]
-#
-#   [ 3.  3.  3.]]
-#
-#  [[-3. -3. -3.]
-#
-#   [-1. -1. -1.]
-#
-#   [ 1.  1.  1.]
-#
-#   [ 3.  3.  3.]]
-#
-#  [[-3. -3. -3.]
-#
-#   [-1. -1. -1.]
-#
-#   [ 1.  1.  1.]
-#
-#   [ 3.  3.  3.]]
-#
-#  [[-3. -3. -3.]
-#
-#   [-1. -1. -1.]
-#
-#   [ 1.  1.  1.]
-#
-#   [ 3.  3.  3.]]] [[[-3.  0.  3.]
-#
-#   [-3.  0.  3.]
-#
-#   [-3.  0.  3.]
-#
-#   [-3.  0.  3.]]
-#
-#  [[-3.  0.  3.]
-#
-#   [-3.  0.  3.]
-#
-#   [-3.  0.  3.]
-#
-#   [-3.  0.  3.]]
-#
-#  [[-3.  0.  3.]
-#
-#   [-3.  0.  3.]
-#
-#   [-3.  0.  3.]
-#
-#   [-3.  0.  3.]]
-#
-#  [[-3.  0.  3.]
-#
-#   [-3.  0.  3.]
-#
-#   [-3.  0.  3.]
-#
-#   [-3.  0.  3.]]
-#
-#  [[-3.  0.  3.]
-#
-#   [-3.  0.  3.]
-#
-#   [-3.  0.  3.]
-#
-#   [-3.  0.  3.]]]
-#
-# mag:
-#
-# [[[  5.60000000e-04   7.20000000e-04   5.60000000e-04]
-#
-#   [  7.10000000e-04   5.70000000e-04   7.10000000e-04]
-#
-#   [  7.10000000e-04   5.70000000e-04   7.10000000e-04]
-#
-#   [  5.60000000e-04   7.20000000e-04   5.60000000e-04]]
-#
-#  [[  6.90000000e-04   6.40000000e-04   6.90000000e-04]
-#
-#   [  6.80000000e-04   6.00000000e-05   6.80000000e-04]
-#
-#   [  6.80000000e-04   6.00000000e-05   6.80000000e-04]
-#
-#   [  6.90000000e-04   6.40000000e-04   6.90000000e-04]]
-#
-#
-#  [[  7.20000000e-04   5.00000000e-04   7.20000000e-04]
-#
-#   [  5.70000000e-04   3.66000000e-03   5.70000000e-04]
-#
-#   [  5.70000000e-04   3.66000000e-03   5.70000000e-04]
-#
-#   [  7.20000000e-04   5.00000000e-04   7.20000000e-04]]
-#
-#  [[  6.90000000e-04   6.40000000e-04   6.90000000e-04]
-#
-#   [  6.80000000e-04   6.00000000e-05   6.80000000e-04]
-#
-#   [  6.80000000e-04   6.00000000e-05   6.80000000e-04]
-#
-#   [  6.90000000e-04   6.40000000e-04   6.90000000e-04]]
-#
-#  [[  5.60000000e-04   7.20000000e-04   5.60000000e-04]
-#
-#   [  7.10000000e-04   5.70000000e-04   7.10000000e-04]
-#
-#   [  7.10000000e-04   5.70000000e-04   7.10000000e-04]
-#
-#   [  5.60000000e-04   7.20000000e-04   5.60000000e-04]]]
 #%% [markdown]
 # ## Week 9:
 #%% [markdown]
@@ -657,8 +194,6 @@ z.dump('z_test.dat')
 mag.dump('den_test.dat')
 
 #%%
-# Mayavi code:
-
 from mayavi import mlab
 
 mu, sigma = 0, 0.1
@@ -673,7 +208,7 @@ mlab.axes()
 mlab.show()
 
 #%%
-###Volume slicer code:
+
 import numpy as np
 
 from traits.api import HasTraits, Instance, Array, on_trait_change
@@ -685,13 +220,10 @@ from tvtk.pyface.scene import Scene
 from mayavi import mlab
 from mayavi.core.api import PipelineBase, Source
 from mayavi.core.ui.api import SceneEditor, MayaviScene, MlabSceneModel
-
-################################################################################
 # Create some data
 data = np.load('den_test.dat')
 
 
-################################################################################
 # The object implementing the dialog
 class VolumeSlicer(HasTraits):
     # The data to plot
