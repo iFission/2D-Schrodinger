@@ -49,16 +49,44 @@ def angular_wave_func(m, l, theta, phi):
         elif m == -1:
             Y = np.sqrt(3 / (8 * c.pi)) * np.sin(theta) * np.exp(phi * -j)
     elif l == 2:
-        if m == 0:
-            Y = np.sqrt(5 / (16 * pi)) * (3 * np.power(np.cos(theta), 2) - 1)
+        if m == 2:
+            Y = np.sqrt(15 / (32 * pi)) * np.power(np.sin(theta), 2) * np.exp(
+                2 * phi * j)
         elif m == 1:
             Y = -np.sqrt(15 /
                          (8 * pi)) * np.cos(theta) * np.sin(theta) * np.exp(
                              phi * j)
+        elif m == 0:
+            Y = np.sqrt(5 / (16 * pi)) * (3 * np.power(np.cos(theta), 2) - 1)
         elif m == -1:
             Y = np.sqrt(15 /
                         (8 * pi)) * np.cos(theta) * np.sin(theta) * np.exp(
                             phi * -j)
+        elif m == -2:
+            Y = np.sqrt(15 / (32 * pi)) * np.power(np.sin(theta), 2) * np.exp(
+                2 * phi * -j)
+    elif l == 3:
+        if m == 3:
+            Y = -np.sqrt(35 / (64 * pi)) * np.power(np.sin(theta), 3) * np.exp(
+                3 * phi * j)
+        elif m == 2:
+            Y = np.sqrt(105 / (32 * pi)) * np.cos(theta) * np.power(
+                np.sin(theta), 2) * np.exp(2 * phi * j)
+        elif m == 1:
+            Y = -np.sqrt(21 / (64 * pi)) * np.sin(theta) * (
+                5 * np.power(np.cos(theta), 2) - 1) * np.exp(phi * j)
+        elif m == 0:
+            Y = np.sqrt(7 / (16 * pi)) * (
+                5 * np.power(np.cos(theta), 3) - 3 * np.cos(theta))
+        elif m == -1:
+            Y = np.sqrt(21 / (64 * pi)) * np.sin(theta) * (
+                5 * np.power(np.cos(theta), 2) - 1) * np.exp(phi * -j)
+        elif m == -2:
+            Y = np.sqrt(105 / (32 * pi)) * np.cos(theta) * np.power(
+                np.sin(theta), 2) * np.exp(2 * phi * -j)
+        elif m == -3:
+            Y = np.sqrt(35 / (64 * pi)) * np.power(np.sin(theta), 3) * np.exp(
+                3 * phi * -j)
     return np.round(Y, 5)
 
 
@@ -91,6 +119,16 @@ def radial_wave_func(n, l, r):
             R = 1 / 4 * (1 - 3 / 4 * (r / a) + 1 / 8 + np.power(
                 (r / a), 2) - 1 / 192 * np.power(
                     (r / a), 3)) * np.exp(-r / (4 * a))
+        elif l == 1:
+            R = np.sqrt(5) / (16 * np.sqrt(3)) * (r / a) * (
+                1 - 1 / 4 * (r / a) + 1 / 80 + np.power(
+                    (r / a), 2)) * np.exp(-r / (4 * a))
+        elif l == 2:
+            R = 1 / (64 * np.sqrt(5)) * np.power(
+                (r / a), 2) * (1 - 1 / 12 * (r / a)) * np.exp(-r / (4 * a))
+        elif l == 3:
+            R = 1 / (768 * np.sqrt(35)) * np.power(
+                (r / a), 3) * np.exp(-r / (4 * a))
     return np.round(R, 5)
 
 
@@ -135,21 +173,19 @@ def mgrid3d(xstart, xend, xpoints, ystart, yend, ypoints, zstart, zend,
 
 
 #%%
-
 import numpy as np
 
 
 def real_angular_wave_func(m, l, theta, phi):
+    m = float(m)  # convert m to float to allow for power to -ve m
     if m < 0:
-        return np.real(
-            1j / np.sqrt(2) * (angular_wave_func(m, l, theta, phi) - (
-                (-1)**m) * angular_wave_func(-m, l, theta, phi)))
+        return j / np.sqrt(2) * (angular_wave_func(m, l, theta, phi) - (
+            (-1)**m) * angular_wave_func(-m, l, theta, phi))
     elif m == 0:
-        return np.real(angular_wave_func(m, l, theta, phi))
-    else:
-        return np.real(
-            1 / np.sqrt(2) * (angular_wave_func(-m, l, theta, phi) + (
-                (-1)**m) * angular_wave_func(m, l, theta, phi)))
+        return angular_wave_func(m, l, theta, phi)
+    elif m > 0:
+        return 1 / np.sqrt(2) * (angular_wave_func(-m, l, theta, phi) + (
+            (-1)**m) * angular_wave_func(m, l, theta, phi))
 
 
 def hydrogen_wave_func(n, l, m, roa, Nx, Ny, Nz):
@@ -172,6 +208,14 @@ def hydrogen_wave_func(n, l, m, roa, Nx, Ny, Nz):
                  5))  # use np's round function, convert nparray to tuple
 
 
+print('\n')
+print('Test 2')
+x, y, z, mag = hydrogen_wave_func(4, 3, 3, 5, 3, 4, 2)
+print('x, y, z:')
+print(x, y, z)
+print('mag:')
+print(mag)
+
 #%% [markdown]
 # ## Week 9:
 #%% [markdown]
@@ -181,31 +225,73 @@ def hydrogen_wave_func(n, l, m, roa, Nx, Ny, Nz):
 # Code to save the data to a file so that
 # you don't have to keep on computing it:
 
-print('Test ')
-x, y, z, mag = hydrogen_wave_func(4, 1, -1, 40, 100, 100, 100)
-print('x, y, z:')
-print(x, y, z)
-print('mag:')
-print(mag)
-print(x, y, z, mag)
-x.dump('x_test.dat')
-y.dump('y_test.dat')
-z.dump('z_test.dat')
-mag.dump('den_test.dat')
+#%%
+'define a function to call hydrogen_wave_func on a n,l,m and batch save to folder'
+import os
+
+
+def hydrogen_wave_func_save(n, l, m, roa=40, Nx=100, Ny=100, Nz=100):
+    x, y, z, mag = hydrogen_wave_func(n, l, m, roa, Nx, Ny, Nz)
+    folder_path = f'{n},{l},{m}'
+    os.system(f'mkdir {folder_path}')
+    np.save(f'{folder_path}/x.npy', x)
+    np.save(f'{folder_path}/y.npy', y)
+    np.save(f'{folder_path}/z.npy', z)
+    np.save(f'{folder_path}/den.npy', mag)
+
 
 #%%
+'function to generate n,l,m based on given n'
+
+
+def generate_n_l_m(n):
+    ls = []
+    for l in range(n):
+        for m in np.arange(-l, l + 1, 1):
+            ls.append((n, l, m))
+    return ls
+
+
+#%%
+'generate npy files for n=4'
+from tqdm import tqdm
+
+n = 4
+for n, l, m in tqdm(generate_n_l_m(n)):
+    hydrogen_wave_func_save(n, l, m, 40, 100, 100, 100)
+
+#%%
+import numpy as np
 from mayavi import mlab
 
 mu, sigma = 0, 0.1
-x = np.load('x_test.dat')
-y = np.load('y_test.dat')
-z = np.load('z_test.dat')
 
-density = np.load('den_test.dat')
-figure = mlab.figure('DensityPlot')
-pts = mlab.contour3d(density, contours=40, opacity=0.4)
-mlab.axes()
-mlab.show()
+
+def mlab_save_3d(n, l, m):
+    folder_path = f'{n},{l},{m}'
+    x = np.load(f'{folder_path}/x.npy')
+    y = np.load(f'{folder_path}/y.npy')
+    z = np.load(f'{folder_path}/z.npy')
+    density = np.load(f'{folder_path}/den.npy')
+
+    figure = mlab.figure(f'Density Plot for n={n}, l={l}, m={m}')
+    pts = mlab.contour3d(x, y, z, density, contours=40, opacity=0.4)
+    mlab.axes()
+    mlab.title(f'Density plot for n={n}, l={l}, m={m}')
+    # mlab.axes()
+    # mlab.show()
+    mlab.savefig(f'{folder_path}/{folder_path}_3d.png')
+    mlab.savefig(f'{folder_path}/{folder_path}_3d.png')
+    mlab.close()
+
+
+#%%
+'save 3d plots for n=4'
+from tqdm import tqdm
+
+n = 4
+for n, l, m in tqdm(generate_n_l_m(n)):
+    mlab_save_3d(n, l, m)
 
 #%%
 
@@ -220,8 +306,6 @@ from tvtk.pyface.scene import Scene
 from mayavi import mlab
 from mayavi.core.api import PipelineBase, Source
 from mayavi.core.ui.api import SceneEditor, MayaviScene, MlabSceneModel
-# Create some data
-data = np.load('den_test.dat')
 
 
 # The object implementing the dialog
@@ -397,51 +481,25 @@ class VolumeSlicer(HasTraits):
     )
 
 
-m = VolumeSlicer(data=data)
-m.configure_traits()
+#%%
+def mlab_save_cross(n, l, m):
+    folder_path = f'{n},{l},{m}'
+    data = np.load(f'{folder_path}/den.npy')
 
-#%% [markdown]
-# ## Plot Submission
-#
-# Submit your plot for your assigned quantum numbers to your Chemistry instructors to get a point for this item.
-#%% [markdown]
-# ## eDimension Questions
-#
-# Answer the following questions on eDimension Week 10.
-#%% [markdown]
-# Q1: In the final function to calculate the hydrogen wave function, you are to use the other previous functions you have calculated. However, some of those functions rounds the result to 5 decimal places. The error on the final wave function magnitude is called ```____``` due to ```____```.
-#
-# 1. floating point error, rounding error.
-# 1. propagation error, rounding error.
-# 1. propagation error, floating point error.
-# 1. rounding error, propagation error.
-#
-#%% [markdown]
-# Q2: What is the effect when you increase the number of points $N_x$,$N_y$,$N_z$, while maintaining the values the other parameters?
-#
-# 1. increase of accuracy, decrease of computational time.
-# 1. decrease of accuracy, increase of computational time.
-# 1. increalse of accuracy, increase of computational time.
-# 1. decrease of accuracy, decrease of computational time.
-#
-#%% [markdown]
-# Q3: What is the effect of increasing the distance $r/a$, while maintaining the values
-# of the other paramters?
-#
-# 1. increase of accuracy, no change in computational time.
-# 1. decrease of accuracy, change in computational time.
-# 1. increalse of accuracy, change in computational time.
-# 1. decrease of accuracy, no change in computational time.
-#%% [markdown]
-# # Example Plots
-#
-#
-# ![wave200.png](attachment:wave200.png)
-# Magnitude plot for n = 2, l = 0, m = 0 using contour3d from mlab Mayavi package.
-#
-# ![wave211.png](attachment:wave211.png)
-# Magnitude plot for n = 2, l = 1, m = 1 using contour3d from mlab Mayavi package.
-#
-# ![wave322.png](attachment:wave322.png)
-# Magnitude plot for n = 3, l = 2, m = 2 using contour3d from mlab Mayavi package.
-#
+    m = VolumeSlicer(data=data)
+    try:
+        m.edit_traits()
+    finally:
+        m.scene3d.save(f'{folder_path}/{folder_path}_cross_3d.png')
+        m.scene_x.save(f'{folder_path}/{folder_path}_cross_x.png')
+        m.scene_y.save(f'{folder_path}/{folder_path}_cross_y.png')
+        m.scene_z.save(f'{folder_path}/{folder_path}_cross_z.png')
+
+
+#%%
+'save cross sectional plots for n=4'
+from tqdm import tqdm
+
+n = 4
+for n, l, m in tqdm(generate_n_l_m(n)):
+    mlab_save_cross(n, l, m)
