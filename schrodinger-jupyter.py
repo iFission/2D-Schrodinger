@@ -76,8 +76,8 @@ def angular_wave_func(m, l, theta, phi):
             Y = -np.sqrt(21 / (64 * pi)) * np.sin(theta) * (
                 5 * np.power(np.cos(theta), 2) - 1) * np.exp(phi * j)
         elif m == 0:
-            Y = np.sqrt(7 / (16 * pi)) * (
-                5 * np.power(np.cos(theta), 3) - 3 * np.cos(theta))
+            Y = np.sqrt(7 / (16 * pi)) * (5 * np.power(np.cos(theta), 3) -
+                                          3 * np.cos(theta))
         elif m == -1:
             Y = np.sqrt(21 / (64 * pi)) * np.sin(theta) * (
                 5 * np.power(np.cos(theta), 2) - 1) * np.exp(phi * -j)
@@ -109,8 +109,9 @@ def radial_wave_func(n, l, r):
             R = 2 / (81 * np.sqrt(3)) * (27 - 18 * (r / a) + 2 * np.power(
                 (r / a), 2)) * np.exp(-r / (3 * a))
         elif l == 1:
-            R = 8 / (27 * np.sqrt(6)) * (1 - r / (6 * a)) * (r / a) * np.exp(
-                -r / (3 * a))
+            R = 8 / (27 * np.sqrt(6)) * (1 - r /
+                                         (6 * a)) * (r / a) * np.exp(-r /
+                                                                     (3 * a))
         elif l == 2:
             R = 4 / (81 * np.sqrt(30)) * np.power(
                 (r / a), 2) * np.exp(-r / (3 * a))
@@ -252,13 +253,29 @@ def generate_n_l_m(n):
     return ls
 
 
-#%%
 'generate npy files for n=4'
 from tqdm import tqdm
+import multiprocessing
 
 n = 4
+
+processes = []
 for n, l, m in tqdm(generate_n_l_m(n)):
-    hydrogen_wave_func_save(n, l, m, 40, 100, 100, 100)
+    proc = multiprocessing.Process(target=hydrogen_wave_func_save,
+                                   args=[
+                                       n,
+                                       l,
+                                       m,
+                                       40,
+                                       100,
+                                       100,
+                                       100,
+                                   ])
+    processes.append(proc)
+    proc.start()
+
+for proc in processes:
+    proc.join()
 
 #%%
 import numpy as np
@@ -341,8 +358,8 @@ class VolumeSlicer(HasTraits):
     # Default values
     #---------------------------------------------------------------------------
     def _data_src3d_default(self):
-        return mlab.pipeline.scalar_field(
-            self.data, figure=self.scene3d.mayavi_scene)
+        return mlab.pipeline.scalar_field(self.data,
+                                          figure=self.scene3d.mayavi_scene)
 
     def make_ipw_3d(self, axis_name):
         ipw = mlab.pipeline.image_plane_widget(
@@ -392,8 +409,9 @@ class VolumeSlicer(HasTraits):
             self.data_src3d.mlab_source.dataset,
             figure=scene.mayavi_scene,
         )
-        ipw = mlab.pipeline.image_plane_widget(
-            outline, plane_orientation='%s_axes' % axis_name)
+        ipw = mlab.pipeline.image_plane_widget(outline,
+                                               plane_orientation='%s_axes' %
+                                               axis_name)
         setattr(self, 'ipw_%s' % axis_name, ipw)
 
         # Synchronize positions between the corresponding image plane
@@ -450,29 +468,25 @@ class VolumeSlicer(HasTraits):
     view = View(
         HGroup(
             Group(
-                Item(
-                    'scene_y',
-                    editor=SceneEditor(scene_class=Scene),
-                    height=250,
-                    width=300),
-                Item(
-                    'scene_z',
-                    editor=SceneEditor(scene_class=Scene),
-                    height=250,
-                    width=300),
+                Item('scene_y',
+                     editor=SceneEditor(scene_class=Scene),
+                     height=250,
+                     width=300),
+                Item('scene_z',
+                     editor=SceneEditor(scene_class=Scene),
+                     height=250,
+                     width=300),
                 show_labels=False,
             ),
             Group(
-                Item(
-                    'scene_x',
-                    editor=SceneEditor(scene_class=Scene),
-                    height=250,
-                    width=300),
-                Item(
-                    'scene3d',
-                    editor=SceneEditor(scene_class=MayaviScene),
-                    height=250,
-                    width=300),
+                Item('scene_x',
+                     editor=SceneEditor(scene_class=Scene),
+                     height=250,
+                     width=300),
+                Item('scene3d',
+                     editor=SceneEditor(scene_class=MayaviScene),
+                     height=250,
+                     width=300),
                 show_labels=False,
             ),
         ),
